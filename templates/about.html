@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Platter.com</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        /* Header Styling */
+        header {
+            background-color: #A66E58;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 36px;
+        }
+
+        header p {
+            margin: 5px 0 0;
+            font-size: 18px;
+        }
+
+        /* About Section */
+        .about-us {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .about-us h2 {
+            text-align: center;
+            color: #A66E58;
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+
+        .about-us p {
+            text-align: center;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        /* Features Section */
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .feature {
+            flex: 1 1 calc(33.33% - 20px);
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .feature h3 {
+            color: #A66E58;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .feature p {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        /* Button Styling */
+        .home-button {
+            display: block;
+            width: fit-content;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #A66E58;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .home-button:hover {
+            background-color: #8f5744;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #A66E58;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: 20px;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>About Us</h1>
+        <p>Platter.com - Delivering Happiness to Your Doorstep</p>
+    </header>
+
+    <section class="about-us">
+        <h2>Who We Are</h2>
+        <p>
+            At Platter.com, we believe in bringing the best culinary experiences to your table. Our platform connects you 
+            with a diverse range of restaurants and food vendors, ensuring that you enjoy your favorite meals from the 
+            comfort of your home. With a user-friendly interface and efficient delivery network, we are committed to 
+            delighting every food lover.
+        </p>
+
+        <div class="features">
+            <!-- Feature 1 -->
+            <div class="feature">
+                <img src="{{ url_for('static', filename='images/img13.jpeg') }}" alt="Quality Ingredients">
+                <h3>Quality Ingredients</h3>
+                <p>We prioritize quality and work with restaurants that use fresh, premium ingredients for every dish.</p>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="feature">
+                <img src="{{ url_for('static', filename='images/img1.jpeg') }}" alt="Diverse Cuisine">
+                <h3>Variety of Cuisines</h3>
+                <p>From Indian curries to Italian pizzas, our platform offers a world of flavors to explore.</p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="feature">
+                <img src="{{ url_for('static', filename='images/img11.jpeg') }}" alt="Affordable Meals">
+                <h3>Affordable Meals</h3>
+                <p>Enjoy delicious meals without breaking the bank, with our carefully curated affordable options.</p>
+            </div>
+        </div>
+
+        <!-- Return to Home Button -->
+        <a href="{{ url_for('home') }}" class="home-button">Return to Home</a>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Platter.com. All Rights Reserved.</p>
+    </footer>
+
+</body>
+
+</html>

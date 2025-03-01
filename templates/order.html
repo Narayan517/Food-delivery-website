@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Food</title>
+    <style>
+        /* Existing CSS */
+        /* Navbar Styling */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(166, 110, 88, 0.9);
+            padding: 10px 20px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        nav #logo img {
+            height: 80px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #ffd700;
+            transform: scale(1.1);
+        }
+
+        /* Dish Cards */
+        .dish-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .dish-card {
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .dish-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .dish-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .dish-card h3, .dish-card p {
+            margin: 10px;
+            text-align: center;
+        }
+
+        .dish-card button {
+            margin: 10px;
+            padding: 5px 10px;
+            background-color: #a66e58;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .dish-card button:hover {
+            background-color: #b88a6f;
+        }
+
+        /* Cart Section */
+        #cart-section {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        #cart-items li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        #cart-items li img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        #cart-summary div {
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #coupon-section {
+            margin-top: 10px;
+        }
+
+        #coupon-section input {
+            width: calc(100% - 100px);
+            padding: 5px;
+            margin-right: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        #coupon-section button {
+            padding: 5px 10px;
+            background-color: #a66e58;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #checkout {
+            margin-top: 10px;
+            padding: 10px;
+            width: 100%;
+            background-color: #a66e58;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .quantity-controls button {
+            padding: 5px 8px;
+            margin: 0 5px;
+            background-color: #ddd;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .quantity-controls button:hover {
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav>
+    <div id="logo">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Platter.com Logo">
+    </div>
+    <ul>
+        <li><a href="{{ url_for('home') }}">Home</a></li>
+        <li><a href="{{ url_for('about') }}">About Us</a></li>
+        <li><a href="{{ url_for('order') }}">Orders</a></li>
+        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+    </ul>
+</nav>
+
+<!-- Dish Cards -->
+<div class="dish-container">
+    {% for dish in dishes %}
+    <div class="dish-card">
+        <img src="{{ url_for('static', filename='images/' + dish.img) }}" alt="{{ dish.name }}">
+        <h3>{{ dish.name }}</h3>
+        <p>₹{{ dish.price }}</p>
+        <button onclick="addToCart('{{ dish.name }}', '{{ dish.img }}', {{ dish.price }})">Add to Cart</button>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Cart Section -->
+<!-- Cart Section -->
+<form method="POST" action="{{ url_for('order') }}">
+    <div id="cart-section">
+        <h2>Your Cart</h2>
+        <ul id="cart-items"></ul>
+
+        <div id="cart-summary">
+            <div>
+                <span>Total Items:</span><span id="total-items">0</span>
+            </div>
+            <div>
+                <span>Total Price:</span><span id="total-price">₹0</span>
+            </div>
+            <div>
+                <span>Discount:</span><span id="discount">₹0</span>  <!-- Show the discount here -->
+            </div>
+        </div>
+
+        <div id="coupon-section">
+            <input type="text" id="coupon-code" placeholder="Enter Coupon Code (e.g., DISCOUNT10%)" name="coupon_code">
+            <button type="button" onclick="applyCoupon()">Apply</button>
+        </div>
+
+        <button type="submit" id="checkout">Checkout</button>
+        <!-- Hidden Fields for Form Submission -->
+        <input type="hidden" name="items" id="hidden-items">
+        <input type="hidden" name="total_price" id="hidden-total-price">
+        <input type="hidden" name="discount" id="hidden-discount"> <!-- Hidden field to send discount -->
+    </div>
+</form>
+
+<script>
+    let cart = [];
+    let totalPrice = 0;
+    let discount = 0;
+
+    const dishPrices = {
+        "Butter Naan with Curry": 200,
+        "Burger and Fries": 250,
+        "Macaroni Pasta": 300,
+        "Masala Idli": 350,
+        "Biryani": 350,
+        "Cheesy Pizza": 350,
+        "Chocolate Cake": 350
+    };
+
+    function addToCart(name, img, price) {
+        const existingItem = cart.find(item => item.name === name);
+        if (existingItem) {
+            existingItem.quantity++;
+        } else {
+            cart.push({ name, img, price, quantity: 1 });
+        }
+        updateCart();
+    }
+
+    function updateCart() {
+        const cartItemsContainer = document.getElementById('cart-items');
+        cartItemsContainer.innerHTML = '';
+        let totalItems = 0;
+        totalPrice = 0;
+
+        cart.forEach(({ name, img, price, quantity }) => {
+            totalItems += quantity;
+            totalPrice += price * quantity;
+
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <img src="{{ url_for('static', filename='images/') }}${img}" alt="${name}">
+                <span>${name}</span>
+                <div class="quantity-controls">
+                    <button onclick="changeQuantity('${name}', -1)">-</button>
+                    <span>${quantity}</span>
+                    <button onclick="changeQuantity('${name}', 1)">+</button>
+                </div>
+                <span>₹${(price * quantity).toFixed(2)}</span>
+                <button onclick="removeItem('${name}')">Remove</button>
+            `;
+            cartItemsContainer.appendChild(li);
+        });
+
+        document.getElementById('total-items').textContent = totalItems;
+        document.getElementById('total-price').textContent = `₹${(totalPrice - discount).toFixed(2)}`;
+        document.getElementById('discount').textContent = `₹${discount.toFixed(2)}`;
+
+        // Update hidden fields for form submission
+        document.getElementById('hidden-items').value = JSON.stringify(cart); // Send full cart data
+        document.getElementById('hidden-total-price').value = totalPrice - discount;
+        document.getElementById('hidden-discount').value = discount;  // Send discount
+    }
+
+    function applyCoupon() {
+        const couponCode = document.getElementById('coupon-code').value.trim();
+        if (couponCode === 'DISCOUNT10%') {
+            discount = totalPrice * 0.1; // 10% discount
+            alert('Coupon applied! 10% discount added.');
+        } else {
+            discount = 0;
+            alert('Invalid coupon code. Please use DISCOUNT10%.');
+        }
+        updateCart();
+    }
+
+    updateCart(); // Initialize cart display
+</script>
+
+
+</body>
+</html>

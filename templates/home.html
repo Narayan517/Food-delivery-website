@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Platter.com</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* General page styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        /* Navbar styling */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #A66E58;
+            color: white;
+        }
+
+        nav #logo img {
+            height: 80px;
+            width: auto;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #ffd700;
+        }
+
+        /* Hero Section Styling */
+        .slideshow-container {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            height: 70vh;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slide .text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .slide .btn-cta {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #A66E58;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .slide .btn-cta:hover {
+            background-color: #ffd700;
+        }
+
+        .dots {
+            position: absolute;
+            bottom: 5%;
+            width: 100%;
+            text-align: center;
+        }
+
+        .dot {
+            cursor: pointer;
+            height: 15px;
+            width: 15px;
+            margin: 0 5px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+
+        .dot.active {
+            background-color: white;
+        }
+
+        /* Featured dishes section */
+        .featured-dishes {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .featured-dishes h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .dishes-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .dish-card {
+            background-color: white;
+            border-radius: 10px;
+            width: 250px;
+            margin: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .dish-card:hover {
+            transform: scale(1.05);
+        }
+
+        .dish-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .dish-card h3 {
+            margin: 15px 0;
+            font-size: 20px;
+        }
+
+        .dish-card p {
+            font-size: 16px;
+            color: #666;
+        }
+
+        /* Popular categories section */
+        .popular-categories {
+            padding: 40px 20px;
+            background-color: #f1f1f1;
+            text-align: center;
+        }
+
+        .popular-categories h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .categories-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .category-card {
+            background-color: white;
+            border-radius: 10px;
+            width: 200px;
+            margin: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .category-card:hover {
+            transform: scale(1.05);
+        }
+
+        .category-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .category-card h3 {
+            margin-top: 10px;
+            font-size: 20px;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #A66E58;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav>
+        <div id="logo">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Platter.com">
+        </div>
+        <ul>
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('about') }}">About Us</a></li>
+            <li><a href="{{ url_for('order') }}">Orders</a></li>
+            <li><a href="{{ url_for('index') }}">Logout</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section with Sliding Images -->
+    <section class="hero-section">
+        <div class="slideshow-container">
+            <div class="slide">
+                <img src="{{ url_for('static', filename='images/img2.jpg') }}" alt="Food Background">
+                <div class="text">
+                    <h1>Welcome to Platter</h1>
+                    <p>Your favorite food delivered at your doorstep.</p>
+                    <a href="{{ url_for('order') }}" class="btn-cta">Order Now</a>
+                </div>
+            </div>
+            <div class="slide">
+                <img src="{{ url_for('static', filename='images/img13.jpeg') }}" alt="Delicious Dish">
+                <div class="text">
+                    <h1>Explore New Flavors</h1>
+                    <p>Find your next favorite meal with us.</p>
+                    <a href="{{ url_for('order') }}" class="btn-cta">Order Now</a>
+                </div>
+            </div>
+            <div class="slide">
+                <img src="{{ url_for('static', filename='images/img7.jpg') }}" alt="Fresh Ingredients">
+                <div class="text">
+                    <h1>Fresh and Healthy</h1>
+                    <p>Only the best ingredients for you.</p>
+                    <a href="{{ url_for('order') }}" class="btn-cta">Order Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="dots">
+            <span class="dot" onclick="showSlide(0)"></span>
+            <span class="dot" onclick="showSlide(1)"></span>
+            <span class="dot" onclick="showSlide(2)"></span>
+        </div>
+    </section>
+
+    <!-- Featured Dishes Section -->
+    <section class="featured-dishes">
+        <h2> Popular Categories</h2>
+        <div class="dishes-container">
+            <div class="dish-card">
+                <img src="{{ url_for('static', filename='images/img10.jpeg') }}" alt="Coffee">
+                <h3>Cup of Coffee</h3>
+                <p>Enjoy croissant bread with a cup of coffee.</p>
+            </div>
+            <div class="dish-card">
+                <img src="{{ url_for('static', filename='images/img8.jpg') }}" alt="Pizza">
+                <h3>Delicious Pizza</h3>
+                <p>Fresh, hot, and cheesy pizza for you.</p>
+            </div>
+            <div class="dish-card">
+                <img src="{{ url_for('static', filename='images/img6.jpg') }}" alt="Veggies">
+                <h3>Desserts</h3>
+                <p>Healthy and fresh dishes.</p>
+            </div>
+            <div class="dish-card">
+                <img src="{{ url_for('static', filename='images/img11.jpeg') }}" alt="Veggies">
+                <h3>Combo </h3>
+                <p>Healthy and fresh dishes.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Categories Section -->
+    <section class="popular-categories">
+        <h2>Featured Dishes</h2>
+        <div class="categories-container">
+            <div class="category-card">
+                <img src="{{ url_for('static', filename='images/img4.jpg') }}" alt="Breakfast">
+                <h3>Breakfast</h3>
+            </div>
+            <div class="category-card">
+                <img src="{{ url_for('static', filename='images/img5.jpg') }}" alt="Biryani">
+                <h3>Biryani</h3>
+            </div>
+            <div class="category-card">
+                <img src="{{ url_for('static', filename='images/img6.jpg') }}" alt="Desserts">
+                <h3>Pancakes</h3>
+            </div>
+            <div class="category-card">
+                <img src="{{ url_for('static', filename='images/img8.jpg') }}" alt="Healthy Bowls">
+                <h3>Healthy Bowls</h3>
+            </div>
+            <div class="category-card">
+                <img src="{{ url_for('static', filename='images/img1.jpg') }}" alt="Breakfast">
+                <h3>Butter naan with curry</h3>
+            </div>
+            <div class="category-card">
+                <img src="{{ url_for('static', filename='images/img2.jpg') }}" alt="Biryani">
+                <h3>Burger</h3>
+            </div>
+            <div class="category-card">
+                <img src="{{ url_for('static', filename='images/img15.jpg') }}" alt="Desserts">
+                <h3>Spicy Noodles</h3>
+            </div>
+            <div class="category-card">
+                <img src="{{ url_for('static', filename='images/img16.jpg') }}" alt="Healthy Bowls">
+                <h3>Paasta</h3>
+            </div>
+            <div class="category-card">
+                <img src="{{ url_for('static', filename='images/img17.jpeg') }}" alt="Breakfast">
+                <h3>Desserts</h3>
+            </div>
+            <div class="category-card">
+                <img src="{{ url_for('static', filename='images/img18.jpg') }}" alt="Biryani">
+                <h3>Rice with daal</h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 Platter.com. All Rights Reserved.</p>
+    </footer>
+
+    <!-- JavaScript for Slideshow -->
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.style.display = i === index ? 'block' : 'none';
+                dots[i].classList.toggle('active', i === index);
+            });
+            currentSlide = index;
+        }
+
+        function nextSlide() {
+            const nextIndex = (currentSlide + 1) % slides.length;
+            showSlide(nextIndex);
+        }
+
+        setInterval(nextSlide, 3000);
+        showSlide(currentSlide);
+    </script>
+</body>
+
+</html>
